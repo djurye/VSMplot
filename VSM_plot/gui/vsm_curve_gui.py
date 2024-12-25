@@ -2,9 +2,11 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from VSM_plot.models.vsm_data import VsmData
-from VSM_plot.core.curve_correction import CurveCorrector
-import os
+
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from models.vsm_data import VsmData
+from core.curve_correction import CurveCorrector
 
 class VsmCurveApp:
     def __init__(self, root):

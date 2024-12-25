@@ -1,13 +1,14 @@
 import tkinter as tk
-import numpy as np
 from tkinter import filedialog, messagebox, ttk
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from VSM_plot.models.vsm_data import VsmData
-from VSM_plot.core.curve_correction import CurveCorrector
-import os
 from random import choice
+
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from models.vsm_data import VsmData
+from core.curve_correction import CurveCorrector
 
 class VsmCurveApp:
     def __init__(self, root):
