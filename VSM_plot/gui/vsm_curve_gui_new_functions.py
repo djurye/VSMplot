@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from random import choice
-import re
 
-import os
 import sys, os, re
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.vsm_data import VsmData
@@ -181,8 +179,11 @@ class VsmCurveApp:
     def plot_data(self, data):
         self.ax.clear()
         self.configure_hysteresis_curve_graph(data["file_name"])
-        self.ax.plot(data["magnetic_field"], data["corrected_moment"], label="Curve", color="green")
-        self.axins.plot(data["magnetic_field"], data["corrected_moment"], color="green")
+        self.ax.plot(data["magnetic_field"], data["corrected_moment"], label="Modified Curve", color="black")
+        self.axins.plot(data["magnetic_field"], data["corrected_moment"], color="black")
+        self.ax.plot(data["magnetic_field"], data["normalized_moment"], label="Original Curve", color="red", linewidth = 0.5, linestyle=":")
+        self.axins.plot(data["magnetic_field"], data["normalized_moment"], color="red", linewidth = 0.5, linestyle=":")
+        self.ax.plot(data["regression_line"][0], data["regression_line"][1], label="Regression Line", color="orange", linewidth = 0.5)
 
         self.ax.legend()
         self.canvas.draw()
@@ -232,8 +233,9 @@ class VsmCurveApp:
         if filtered_data is not None:
             corrector = CurveCorrector(filtered_data["Magnetic Field (Oe)"], filtered_data["Moment (emu)"])
             corrected_moment = corrector.remove_inclination()
+            regression_line = corrector.get_regression_line()
             # Normaliza os dados
-            corrected_moment = corrector.normalize_data()[1]
+            normalized_moment, corrected_moment = corrector.normalize_data()
             # excluir Salva os dados corrigidos temporariamente
             self.corrected_data = corrector.get_inclination_corrected_data()
 
@@ -241,6 +243,8 @@ class VsmCurveApp:
                 "file_name": os.path.basename(file_path),
                 "magnetic_field": filtered_data["Magnetic Field (Oe)"],
                 "corrected_moment": corrected_moment,
+                "normalized_moment": normalized_moment,
+                "regression_line": regression_line
             }
         
         return None

@@ -17,6 +17,7 @@
     > para melhor elegibilidade do código, separar cada frame em file_frame(referente ao frame de manipulaão de arquivos), graph_frame(referente ao frame que contém o grafico), main_frame (referente a janela principal)
 - implementar lógica para index.py
     > é necessário criar o código desse arquivo para que seja o arquivo principal para execução do programa
+- botões proximo/antrerior podem fazer loop
 - criar executável
     > criar um executável para que seja possível abrir o programa sem necessidade de utilizar um interpletador python 
 - fazer documnetação no README.md
