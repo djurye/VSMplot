@@ -289,12 +289,20 @@ class VsmCurveApp:
     def show_previous_file(self):
         if self.current_index > 0:
             self.current_index -= 1
-            self.process_and_plot_current_file()
+
+        elif self.current_index == 0:
+            self.current_index = len(self.file_paths) - 1
+
+        self.process_and_plot_current_file()
 
     def show_next_file(self):
         if self.current_index < len(self.file_paths) - 1:
             self.current_index += 1
-            self.process_and_plot_current_file()
+
+        elif self.current_index == len(self.file_paths) - 1:
+            self.current_index = 0
+
+        self.process_and_plot_current_file()
 
     def save_files(self):
         if not self.file_paths:
