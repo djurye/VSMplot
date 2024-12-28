@@ -20,10 +20,11 @@ class CurveCorrector:
         indices = np.where(self.magnetic_field >= limite_magnetic_field)[0]
         H_linear = self.magnetic_field[indices]
         M_linear = self.moment[indices]
-        self.regression_line = H_linear, M_linear
         
         # Calcular a regressão linear no subconjunto selecionado
         slope, intercept, _, _, _ = linregress(H_linear, M_linear)
+        regression = slope * H_linear + intercept
+        self.regression_line = H_linear, regression
         
         # Corrigir os momentos removendo a inclinação
         self.corrected_moment = self.moment - (slope * self.magnetic_field)
@@ -50,8 +51,13 @@ class CurveCorrector:
 
     def get_regression_line(self):
         """
-        Retorna a linha da regressão linear.
+        Retorna a linha da regressão linear normalizada.
         """
+        max_regresssion_line = np.max(np.abs(self.regression_line[1]))
+        y_regression = self.regression_line[1]
+        y_regression = y_regression / max_regresssion_line
+        self.regression_line = (self.regression_line[0], y_regression)
+        print(self.regression_line[1])
         return self.regression_line
     
     def save_corrected_data(self, output_file):

@@ -179,11 +179,11 @@ class VsmCurveApp:
     def plot_data(self, data):
         self.ax.clear()
         self.configure_hysteresis_curve_graph(data["file_name"])
+        self.ax.plot(data["regression_line"][0], data["regression_line"][1], label="Regression Line", color="blue", linewidth = 0.8)
+        self.ax.plot(data["magnetic_field"], data["normalized_moment"], label="Original Curve", color="red", linewidth = 0.6, linestyle=":")
+        self.axins.plot(data["magnetic_field"], data["normalized_moment"], color="red", linewidth = 0.6, linestyle=":")
         self.ax.plot(data["magnetic_field"], data["corrected_moment"], label="Modified Curve", color="black")
         self.axins.plot(data["magnetic_field"], data["corrected_moment"], color="black")
-        self.ax.plot(data["magnetic_field"], data["normalized_moment"], label="Original Curve", color="red", linewidth = 0.5, linestyle=":")
-        self.axins.plot(data["magnetic_field"], data["normalized_moment"], color="red", linewidth = 0.5, linestyle=":")
-        self.ax.plot(data["regression_line"][0], data["regression_line"][1], label="Regression Line", color="orange", linewidth = 0.5)
 
         self.ax.legend()
         self.canvas.draw()
