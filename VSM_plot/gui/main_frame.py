@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
-from tkinter import ttk
+from VSM_plot.gui.file_frame import FileFrame
+from VSM_plot.gui.graph_frame import GraphFrame
 
-from file_frame import FileFrame
-from graph_frame import GraphFrame
 
 
 class MainFrame(tk.Tk):

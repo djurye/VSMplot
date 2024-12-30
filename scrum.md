@@ -13,7 +13,7 @@
     > encontrar o ponto mais alto da curva (maior), definir o intervalo entre o ponto mais alto a´te o final da curva (intervalo), fazer a regressão a partir do ponto: maior + 0,2 * intervalo (ajustar o coeficiente)
 * ok - integrar o visual antigo (vsm_curve_gui) de plotagem de gráfico ao novo modelo(vsm_curve_gui_new_functions)para que seja exibido o processo de manipulação dos dados
     > no primeiro gráfico obtido, seria interessante exibir a curva de regressão linear de cada curva, quando produzir um gráfico utilizável  esse paramentreos devem ser ocultos, exibindo apenas as curvas de interesse
-- organizar os frames de vsm_curve_gui_new_functions em seus respectivos arquivos
+* ok - organizar os frames de vsm_curve_gui_new_functions em seus respectivos arquivos
     > para melhor elegibilidade do código, separar cada frame em file_frame(referente ao frame de manipulaão de arquivos), graph_frame(referente ao frame que contém o grafico), main_frame (referente a janela principal)
 - implementar lógica para index.py
     > é necessário criar o código desse arquivo para que seja o arquivo principal para execução do programa
