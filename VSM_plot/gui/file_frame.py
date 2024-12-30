@@ -28,17 +28,27 @@ class FileFrame(tk.Frame):
         # TreeView para múltiplos gráficos
         multi_graph_frame = tk.LabelFrame(self, text="Multiple Graphs", padx=5, pady=5)
         multi_graph_frame.grid(row=1, column=0, columnspan=4, sticky="nsew", padx=10, pady=10)
-        multi_graph_frame.rowconfigure(0, weight=1)
+        multi_graph_frame.rowconfigure(0, weight=1, minsize=350)
         multi_graph_frame.columnconfigure(0, weight=1)
         
-        self.tree = ttk.Treeview(multi_graph_frame, columns=("file", "color", "legend"), show="headings", height=6)
+        self.tree = ttk.Treeview(multi_graph_frame, columns=("file", "legend", "color"), show="headings", height=6)
         self.tree.grid(row=0, column=0, sticky="nsew")
+
+        style = ttk.Style()
+        style.configure("Treeview.Heading", font=("Segoe UI Emoji", 12, "bold")) 
+
         self.tree.heading("file", text="File")
-        self.tree.heading("color", text="Line Color")
         self.tree.heading("legend", text="Legend")
+        self.tree.heading("color", text="🎨")
+        #self.tree.heading("remove_inclination", text="⭯ \u25CB")
+        #self.tree.heading("normalize", text="⭿ \u25CB")
+        #self.tree.heading("close_curve", text="⚌ \u25CB")
         self.tree.column("file", width=200, anchor="w")
-        self.tree.column("color", width=100, anchor="center")
-        self.tree.column("legend", width=150, anchor="center")
+        self.tree.column("color", width=50, anchor="center")
+        self.tree.column("legend", width=200, anchor="center")
+        #self.tree.column("remove_inclination", width=50, anchor="center")
+        #self.tree.column("normalize", width=50, anchor="center")
+        #self.tree.column("close_curve", width=50, anchor="center")
         self.tree.bind("<Button-1>", self.on_tree_click)
         
         scrollbar = ttk.Scrollbar(multi_graph_frame, orient="vertical", command=self.tree.yview)
@@ -54,7 +64,7 @@ class FileFrame(tk.Frame):
         
         id = int(''.join(re.findall(r'\d+', item_id))) - 1
 
-        if column_id == "#2":  # Color column
+        if column_id == "#3":  # Color column
             # Obtém as coordenadas do item e a posição relativa ao widget pai
             bbox = self.tree.bbox(item_id, column_id)
             if bbox:  # Garante que a coluna e o item têm um bounding box válido
@@ -62,14 +72,14 @@ class FileFrame(tk.Frame):
                 color_code = colorchooser.askcolor(title="Escolha uma cor")[1]
                 if color_code:
                     # Atualiza a cor de fundo do label com a cor escolhida
-                    self.tree.tag_configure(item_id, background=color_code)
+                    self.tree.tag_configure(item_id, foreground=color_code)
                     self.tree.item(self.tree.get_children()[id], tags=(item_id,))
 
                     values = list(self.tree.item(item_id, "values"))
-                    values[1] = color_code  # Atualiza a coluna de cor com o código hexadecimal
+                    values[2] = color_code  # Atualiza a coluna de cor com o código hexadecimal
                     self.tree.item(item_id, values=tuple(values)) 
 
-        if column_id == "#3":  # Legend column
+        if column_id == "#2":  # Legend column
             # Obtém as coordenadas do item e a posição relativa ao widget pai
             bbox = self.tree.bbox(item_id, column_id)
             if bbox:  # Garante que a coluna e o item têm um bounding box válido
@@ -89,24 +99,32 @@ class FileFrame(tk.Frame):
 
                 # Posiciona a Combobox em relação ao container
                 legend_entry.place(x=combobox_x, y=combobox_y, width=bbox[2], height=bbox[3])
-                legend_var.set(self.tree.item(item_id, "values")[2])
+                legend_var.set(self.tree.item(item_id, "values")[1])
 
 
             def save_legend(event):
                 new_legend = legend_var.get()
                 current_values = list(self.tree.item(item_id, "values"))
-                current_values[2] = new_legend
+                current_values[1] = new_legend
                 self.tree.item(item_id, values=current_values)
                 legend_entry.destroy()
 
             legend_entry.bind("<Return>", save_legend)
             legend_entry.bind("<FocusOut>", save_legend)
-            legend_entry.focus_set()    
+            legend_entry.focus_set()  
+        if column_id == "#4":
+            # Obtém as coordenadas do item e a posição relativa ao widget pai
+            bbox = self.tree.bbox(item_id, column_id)
+            if bbox:  # Garante que a coluna e o item têm um bounding box válido
+                # Atualiza a cor de fundo do label com a cor escolhida
+                self.tree.item(self.tree.get_children()[id], tags=(item_id,))
 
-    def populate_tree(self, data):
-        """Popula o Treeview com dados iniciais."""
-        for item in data:
-            self.tree.insert("", tk.END, values=item)
+                values = list(self.tree.item(item_id, "values"))
+                if values[3] == "\u25CB":
+                    values[3] = "\u25C9"  # Atualiza a coluna de cor com o código hexadecimal
+                else:
+                    values[3] = "\u25CB"
+                self.tree.item(item_id, values=tuple(values)) 
 
     def update_treeview(self,file_paths):
         self.file_paths = file_paths
@@ -114,7 +132,7 @@ class FileFrame(tk.Frame):
             self.tree.delete(item)
 
         for file_path in self.file_paths:
-            self.tree.insert("", tk.END, values=(os.path.basename(file_path), "", os.path.basename(file_path)))
+            self.tree.insert("", tk.END, values=(os.path.basename(file_path), os.path.basename(file_path), ""))
 
     def process_file(self,file_path):
         columns = ["Magnetic Field (Oe)", "Moment (emu)"]
@@ -148,7 +166,7 @@ class FileFrame(tk.Frame):
         selected_items = self.tree.selection()
         
         for item_id in selected_items:
-            file, color, legend = self.tree.item(item_id, "values")
+            file, legend, color = self.tree.item(item_id, "values")
             file_path = next((f for f in self.file_paths if os.path.basename(f) == file), None)
             if file_path:
                 data.append(self.process_file(file_path))
