@@ -37,7 +37,7 @@ class GraphFrame(tk.Frame):
         # Matplotlib canvas
         canvas_frame = tk.Frame(self)
         canvas_frame.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
-        canvas_frame.rowconfigure(0, weight=1)
+        canvas_frame.rowconfigure(0, weight=1, minsize=400)
         canvas_frame.columnconfigure(0, weight=1)
         self.canvas = FigureCanvasTkAgg(self.figure, canvas_frame)
         self.canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
