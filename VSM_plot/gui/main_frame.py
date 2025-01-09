@@ -8,10 +8,12 @@ from VSM_plot.gui.graph_frame import GraphFrame
 class MainFrame(tk.Tk):
     def __init__(self):
         super().__init__()
+        
+        self.iconbitmap("assets/VSMtool.ico")
         self.title("VSM Curve Correction Tool")
         self.create_widgets()
 
-    def create_widgets(self):
+    def create_widgets( self):
 
         self.mainframe = tk.Frame(self, bg="lightgray", bd=2, relief="solid")
         self.mainframe.pack(padx=20, pady=20, fill="both", expand=True)  # Margens de 20px ao redor
