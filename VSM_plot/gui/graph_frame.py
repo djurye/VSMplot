@@ -11,7 +11,7 @@ class GraphFrame(tk.Frame):
         super().__init__(parent)
         self.controller = controller
         # Layout
-        self.prefix_var = tk.StringVar(value="corrected_")
+        self.graph_name_var = tk.StringVar(value="Graph")
         self.figure, self.ax = plt.subplots(figsize=(5, 4))
 
         self.colors = [
@@ -31,7 +31,7 @@ class GraphFrame(tk.Frame):
         save_graph_frame = tk.Frame(self)
         save_graph_frame.grid(row=0, column=1, padx=10, pady=(5,0), sticky="ew")
         tk.Label(save_graph_frame, text="Name for graph:").pack(side=tk.LEFT, padx=(0,5))
-        tk.Entry(save_graph_frame, textvariable=self.prefix_var, width=20).pack(side=tk.LEFT, padx=5)
+        tk.Entry(save_graph_frame, textvariable=self.graph_name_var, width=20).pack(side=tk.LEFT, padx=5)
         tk.Button(save_graph_frame, text="Save Graph", command=self.save_graph, width=20).pack(side=tk.RIGHT, padx=(5,0))
 
         # Matplotlib canvas
@@ -120,8 +120,11 @@ class GraphFrame(tk.Frame):
             return
         
         filename = self.graph_name_var.get()
+
         if not filename:
-            filename="graph.png"
+            filename="Graph.png"
+        elif not filename.endswith(".png"):
+            filename += ".png"
 
         base, extension = os.path.splitext(filename)
         counter = 1
@@ -134,7 +137,7 @@ class GraphFrame(tk.Frame):
         output_file = os.path.join(output_folder, filename)
 
         self.figure.savefig(output_file,dpi=300)
-        plt.show()
+        #plt.show()
 
     def configure_hysteresis_curve_graph(self, file_name):
         # Configurações dos eixos
