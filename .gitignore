@@ -1,0 +1,20 @@
+# Diretórios gerados pelo Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Diretórios do PyInstaller
+build/
+dist/
+*.spec
+
+# Executável gerado
+VSMplot.exe
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+
+# Logs e arquivos de debug
+*.log
